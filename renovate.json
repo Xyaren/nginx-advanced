@@ -19,7 +19,7 @@
         "/^Dockerfile$/"
       ],
       "matchStrings": [
-        "git-clone\\.sh https://github\\.com/(?<depName>[^/]+/[^.]+)\\.git --commit (?<currentDigest>[0-9a-f]{40}) # renovate: currentValue=(?<currentValue>[^\\s]+)"
+        "git-clone\\.sh https://github\\.com/(?<depName>[^/]+/[^.]+)\\.git --commit (?<currentDigest>[0-9a-f]{40})"
       ],
       "datasourceTemplate": "github-tags",
       "versioningTemplate": "git"
