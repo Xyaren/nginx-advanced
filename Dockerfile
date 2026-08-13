@@ -50,6 +50,7 @@ RUN git-clone.sh https://github.com/vozlt/nginx-module-vts.git --ref v0.2.7
 WORKDIR /usr/src/nginx-module-headers-more
 RUN git-clone.sh https://github.com/openresty/headers-more-nginx-module.git --ref v0.40
 
+#TODO: deprecated
 WORKDIR /usr/src/ngx_upstream_jdomain
 RUN git-clone.sh https://github.com/nicholaschiasson/ngx_upstream_jdomain.git --ref 1.5.2
 
@@ -69,7 +70,7 @@ ENV LUAJIT_INC=/usr/src/luajit2/_output/include/luajit-2.1
 
 #for lua
 WORKDIR /usr/src/ngx_devel_kit
-RUN git-clone.sh https://github.com/vision5/ngx_devel_kit.git --ref v0.3.4
+RUN git-clone.sh https://github.com/openresty/ngx_devel_kit.git --ref v0.3.5
 
 #for lua
 WORKDIR /usr/src/lua-nginx-module
