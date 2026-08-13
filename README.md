@@ -9,7 +9,7 @@ A custom nginx Docker image with additional dynamic modules pre-compiled and rea
 | [nginx-module-vts](https://github.com/vozlt/nginx-module-vts) | Virtual host traffic status — exposes per-server/location request and bandwidth metrics |
 | [headers-more-nginx-module](https://github.com/openresty/headers-more-nginx-module) | Add, set, and clear request/response headers beyond what the core `headers` module allows |
 | [ngx_upstream_jdomain](https://github.com/nicholaschiasson/ngx_upstream_jdomain) | Resolves upstream hostnames dynamically at runtime instead of only at startup |
-| [ngx_brotli](https://github.com/google/ngx_brotli) | Brotli compression support for responses |
+| [ngx_http_brotli_module](https://github.com/HanadaLee/ngx_http_brotli_module) | Brotli compression support for responses |
 | [lua-nginx-module](https://github.com/openresty/lua-nginx-module) | Embeds LuaJIT into nginx request processing via non-blocking cosockets |
 | [ngx_devel_kit](https://github.com/vision5/ngx_devel_kit) | Required dependency for lua-nginx-module; provides module development utilities |
 | [ModSecurity-nginx](https://github.com/owasp-modsecurity/ModSecurity-nginx) | Connector that integrates the ModSecurity WAF engine into nginx |

@@ -54,7 +54,7 @@ WORKDIR /usr/src/ngx_upstream_jdomain
 RUN git-clone.sh https://github.com/nicholaschiasson/ngx_upstream_jdomain.git --ref 1.5.2
 
 WORKDIR /usr/src/ngx_brotli
-RUN git-clone.sh https://github.com/google/ngx_brotli.git --commit a71f9312c2deb28875acc7bacfdd5695a111aa53
+RUN git-clone.sh https://github.com/HanadaLee/ngx_http_brotli_module.git --commit 0c6727ab0331c8cd6dffe2d54710d7c7675def6f
 RUN git submodule update --init --recursive
 
 # for lua

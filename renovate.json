@@ -19,18 +19,6 @@
         "/^Dockerfile$/"
       ],
       "matchStrings": [
-        "git-clone\\.sh https://github\\.com/(?<depName>[^/]+/[^.]+)\\.git --commit (?<currentDigest>[0-9a-f]{40})"
-      ],
-      "currentValueTemplate": "master",
-      "datasourceTemplate": "github-tags",
-      "versioningTemplate": "git"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/^Dockerfile$/"
-      ],
-      "matchStrings": [
         "ARG NGINX_VERSION=(?<currentValue>[^\\s]+)"
       ],
       "depNameTemplate": "nginx",
