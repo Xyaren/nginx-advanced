@@ -1,0 +1,11 @@
+services:
+  nginx:
+    build:
+      context: ..
+    image: test-nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./crowdsec-nginx-bouncer.conf:/etc/crowdsec/bouncers/crowdsec-nginx-bouncer.conf:ro
+      - ./test.txt.br:/usr/share/nginx/html/test.txt.br:ro

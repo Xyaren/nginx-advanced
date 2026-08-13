@@ -60,7 +60,7 @@ RUN git submodule update --init --recursive
 # for lua
 
 WORKDIR /usr/src/luajit2
-RUN git-clone.sh https://github.com/openresty/luajit2.git --ref v2.1.0-beta3
+RUN git-clone.sh https://github.com/openresty/luajit2.git --ref v2.1-agentzh
 RUN make -j"$(nproc)" && \
     make install PREFIX=/usr/src/luajit2/_output
 
@@ -120,21 +120,21 @@ WORKDIR /usr/src/lua-resty-lrucache
 RUN git-clone.sh https://github.com/openresty/lua-resty-lrucache.git --ref v0.15
 RUN make install LUA_LIB_DIR=/usr/src/lua/share/lua/5.1
 
-RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-cjson
-RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-resty-http
-RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-resty-string
-RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-resty-openssl
-
-WORKDIR /usr/src
+WORKDIR /usr/src/lua-resty-string
+RUN git-clone.sh https://github.com/openresty/lua-resty-string.git --ref v0.19
+RUN make install LUA_LIB_DIR=/usr/src/lua/share/lua/5.1
 
 WORKDIR /usr/src/lua-cs-bouncer
 RUN git-clone.sh https://github.com/crowdsecurity/lua-cs-bouncer.git --ref v1.0.16
 RUN cp -r lib/* /usr/src/lua/share/lua/5.1/
 
+WORKDIR /usr/src
+RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-cjson 2.1.0.10
+RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-resty-http 0.18.0
+RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-resty-openssl 1.8.0
+
 WORKDIR /usr/src/cs-nginx-bouncer
 RUN git-clone.sh https://github.com/crowdsecurity/cs-nginx-bouncer.git --ref v1.2.1
-
-
 
 # final assembly
 
@@ -157,40 +157,27 @@ COPY --from=build /etc/modsecurity /etc/modsecurity
 
 # lua
 # LuaJIT runtime library
-COPY --from=build \
-    /usr/src/luajit2/_output/lib/libluajit-5.1.so.2 \
-    /usr/local/lib/
+COPY --from=build /usr/src/luajit2/_output/lib/libluajit-5.1.so.2 /usr/local/lib/
 
-# Lua libraries: lua-resty-core, lua-resty-lrucache, etc.
-COPY --from=build \
-    /usr/src/lua/share/lua/5.1 \
-    /usr/local/share/lua/5.1
+# Lua libraries
+COPY --from=build /usr/src/lua/share/lua/5.1 /usr/local/share/lua/5.1
 
 # Native Lua modules: lua-cjson
-COPY --from=build \
-    /usr/src/lua/lib/lua/5.1 \
-    /usr/local/lib/lua/5.1
+COPY --from=build /usr/src/lua/lib/lua/5.1 /usr/local/lib/lua/5.1
 
 RUN ldconfig
 
 COPY --from=build /usr/src/cs-nginx-bouncer/nginx/crowdsec_nginx.conf \
     /etc/nginx/crowdsec/crowdsec_nginx.conf
 
-USER $UID
+RUN printf '%s\n' \
+    'load_module /usr/lib/nginx/modules/ngx_http_vhost_traffic_status_module.so;' \
+    'load_module /usr/lib/nginx/modules/ngx_http_headers_more_filter_module.so;' \
+    'load_module /usr/lib/nginx/modules/ngx_http_upstream_jdomain_module.so;' \
+    'load_module /usr/lib/nginx/modules/ngx_http_brotli_static_module.so;' \
+    'load_module /usr/lib/nginx/modules/ndk_http_module.so;' \
+    'load_module /usr/lib/nginx/modules/ngx_http_lua_module.so;' \
+    'load_module /usr/lib/nginx/modules/ngx_http_modsecurity_module.so;' \
+    > /etc/nginx/modules.conf
 
-# After copying modules and before switching to $UID
-RUN set -eu; \
-    { \
-      echo "load_module /usr/lib/nginx/modules/ngx_http_vhost_traffic_status_module.so;"; \
-      echo "load_module /usr/lib/nginx/modules/ngx_http_headers_more_filter_module.so;"; \
-      echo "load_module /usr/lib/nginx/modules/ngx_http_upstream_jdomain_module.so;"; \
-#      echo "load_module /usr/lib/nginx/modules/ngx_http_brotli_filter_module.so;"; \
-      echo "load_module /usr/lib/nginx/modules/ngx_http_brotli_static_module.so;"; \
-      echo "load_module /usr/lib/nginx/modules/ngx_http_modsecurity_module.so;"; \
-      echo "load_module /usr/lib/nginx/modules/ndk_http_module.so;"; \
-      echo "load_module /usr/lib/nginx/modules/ngx_http_lua_module.so;"; \
-      echo "events {}"; \
-    } > /tmp/nginx.conf; \
-    echo "Test Loading Modules"; \
-    nginx -t -c /tmp/nginx.conf; \
-    rm /tmp/nginx.conf
+USER $UID

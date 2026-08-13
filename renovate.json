@@ -15,8 +15,9 @@
       "customType": "regex",
       "fileMatch": ["^Dockerfile$"],
       "matchStrings": [
-        "git-clone\\.sh https://github\\.com/(?<depName>[^/]+/[^.]+)\\.git --commit (?<currentDigest>[0-9a-f]{40}) # renovate: currentValue=(?<currentValue>[^\\s]+)"
+        "git-clone\\.sh https://github\\.com/(?<depName>[^/]+/[^.]+)\\.git --commit (?<currentDigest>[0-9a-f]{40})"
       ],
+      "currentValueTemplate": "HEAD",
       "datasourceTemplate": "github-tags",
       "versioningTemplate": "git"
     },
@@ -28,6 +29,15 @@
       ],
       "depNameTemplate": "nginx",
       "datasourceTemplate": "docker",
+      "versioningTemplate": "semver-coerced"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": [
+        "install (?<depName>[a-z][a-z0-9-]+) (?<currentValue>[\\d.]+)"
+      ],
+      "datasourceTemplate": "luarocks",
       "versioningTemplate": "semver-coerced"
     }
   ]
