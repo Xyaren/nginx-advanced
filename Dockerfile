@@ -51,9 +51,6 @@ WORKDIR /usr/src/nginx-module-headers-more
 RUN git-clone.sh https://github.com/openresty/headers-more-nginx-module.git --ref v0.40
 
 #TODO: deprecated
-WORKDIR /usr/src/ngx_upstream_jdomain
-RUN git-clone.sh https://github.com/nicholaschiasson/ngx_upstream_jdomain.git --ref 1.5.2
-
 WORKDIR /usr/src/ngx_brotli
 RUN git-clone.sh https://github.com/HanadaLee/ngx_http_brotli_module.git --commit 0c6727ab0331c8cd6dffe2d54710d7c7675def6f
 RUN git submodule update --init --recursive
@@ -101,7 +98,6 @@ RUN NGINX_ARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
     ./configure --with-compat --with-http_ssl_module \
       --add-dynamic-module=/usr/src/nginx-module-vts \
       --add-dynamic-module=/usr/src/nginx-module-headers-more \
-      --add-dynamic-module=/usr/src/ngx_upstream_jdomain \
       --add-dynamic-module=/usr/src/ngx_brotli/static \
 #      --add-dynamic-module=/src/ngx_brotli/filter \
       --add-dynamic-module=/usr/src/ModSecurity-nginx \
@@ -146,7 +142,6 @@ USER root
 
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_vhost_traffic_status_module.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_headers_more_filter_module.so /usr/lib/nginx/modules/
-COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_upstream_jdomain_module.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_brotli_*.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_modsecurity_module.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ndk_http_module.so /usr/lib/nginx/modules/
@@ -174,7 +169,6 @@ COPY --from=build /usr/src/cs-nginx-bouncer/nginx/crowdsec_nginx.conf \
 RUN printf '%s\n' \
     'load_module /usr/lib/nginx/modules/ngx_http_vhost_traffic_status_module.so;' \
     'load_module /usr/lib/nginx/modules/ngx_http_headers_more_filter_module.so;' \
-    'load_module /usr/lib/nginx/modules/ngx_http_upstream_jdomain_module.so;' \
     'load_module /usr/lib/nginx/modules/ngx_http_brotli_static_module.so;' \
     'load_module /usr/lib/nginx/modules/ndk_http_module.so;' \
     'load_module /usr/lib/nginx/modules/ngx_http_lua_module.so;' \
