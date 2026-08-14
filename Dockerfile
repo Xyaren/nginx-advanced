@@ -29,10 +29,6 @@ RUN apt-get clean && \
         liblua5.1-0-dev \
         luarocks \
 # --- lua end--- \
-# --- modsecurity --- \
-        libmodsecurity3 \
-        libmodsecurity-dev \
-# --- modsecurity end --- \
         && \
     rm -rf /var/cache/apt
 
@@ -73,24 +69,6 @@ RUN git-clone.sh https://github.com/openresty/ngx_devel_kit.git --ref v0.3.5
 WORKDIR /usr/src/lua-nginx-module
 RUN git-clone.sh https://github.com/openresty/lua-nginx-module.git --ref v0.10.32rc3
 
-
-
-# Mod Security
-WORKDIR /src/ModSecurity
-#RUN git clone --recursive https://github.com/owasp-modsecurity/ModSecurity .
-#RUN ./build.sh
-#RUN ./configure --enable-examples=false
-#RUN make
-#RUN make install
-RUN apt-get update && apt-get install -y libmodsecurity3  libmodsecurity-dev
-WORKDIR /usr/src/ModSecurity-nginx
-RUN git-clone.sh https://github.com/owasp-modsecurity/ModSecurity-nginx.git --ref v1.0.4
-
-#modescurity rules - coreruleset
-WORKDIR /etc/modsecurity/coreruleset
-RUN git-clone.sh https://github.com/coreruleset/coreruleset.git --ref v4.28.0
-RUN mv crs-setup.conf.example crs-setup.conf
-
 WORKDIR /usr/src/nginx-${NGINX_VERSION}
 RUN ls -ahl /usr/src
 RUN ls -ahl
@@ -100,7 +78,6 @@ RUN NGINX_ARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
       --add-dynamic-module=/usr/src/nginx-module-headers-more \
       --add-dynamic-module=/usr/src/ngx_brotli/static \
 #      --add-dynamic-module=/src/ngx_brotli/filter \
-      --add-dynamic-module=/usr/src/ModSecurity-nginx \
       --add-dynamic-module=/usr/src/ngx_devel_kit  \
       --add-dynamic-module=/usr/src/lua-nginx-module \
       ${NGINX_ARGS} && \
@@ -143,13 +120,8 @@ USER root
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_vhost_traffic_status_module.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_headers_more_filter_module.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_brotli_*.so /usr/lib/nginx/modules/
-COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_modsecurity_module.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ndk_http_module.so /usr/lib/nginx/modules/
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_lua_module.so /usr/lib/nginx/modules/
-
-# required dependency for modsecurity
-RUN apt-get update && apt-get install -y libmodsecurity3
-COPY --from=build /etc/modsecurity /etc/modsecurity
 
 # lua
 # LuaJIT runtime library
@@ -172,7 +144,6 @@ RUN printf '%s\n' \
     'load_module /usr/lib/nginx/modules/ngx_http_brotli_static_module.so;' \
     'load_module /usr/lib/nginx/modules/ndk_http_module.so;' \
     'load_module /usr/lib/nginx/modules/ngx_http_lua_module.so;' \
-    'load_module /usr/lib/nginx/modules/ngx_http_modsecurity_module.so;' \
     > /etc/nginx/modules.conf
 
 USER $UID

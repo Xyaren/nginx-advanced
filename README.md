@@ -11,8 +11,6 @@ A custom nginx Docker image with additional dynamic modules pre-compiled and rea
 | [ngx_http_brotli_module](https://github.com/HanadaLee/ngx_http_brotli_module) | Brotli compression support for responses |
 | [lua-nginx-module](https://github.com/openresty/lua-nginx-module) | Embeds LuaJIT into nginx request processing via non-blocking cosockets |
 | [ngx_devel_kit](https://github.com/vision5/ngx_devel_kit) | Required dependency for lua-nginx-module; provides module development utilities |
-| [ModSecurity-nginx](https://github.com/owasp-modsecurity/ModSecurity-nginx) | Connector that integrates the ModSecurity WAF engine into nginx |
-| [coreruleset](https://github.com/coreruleset/coreruleset) | OWASP Core Rule Set — generic attack detection rules for ModSecurity |
 | [cs-nginx-bouncer](https://github.com/crowdsecurity/cs-nginx-bouncer) | CrowdSec bouncer that blocks IPs based on the CrowdSec decision API |
 
 ## Lua Libraries
