@@ -99,7 +99,7 @@ RUN git-clone.sh https://github.com/openresty/lua-resty-string.git --ref v0.19
 RUN make install LUA_LIB_DIR=/usr/src/lua/share/lua/5.1
 
 WORKDIR /usr/src/lua-cs-bouncer
-RUN git-clone.sh https://github.com/crowdsecurity/lua-cs-bouncer.git --ref v1.0.16
+RUN git-clone.sh https://github.com/crowdsecurity/lua-cs-bouncer.git --ref v1.0.18
 RUN cp -r lib/* /usr/src/lua/share/lua/5.1/
 
 WORKDIR /usr/src
