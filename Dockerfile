@@ -108,7 +108,7 @@ RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/sr
 RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-resty-openssl 1.8.0
 
 WORKDIR /usr/src/cs-nginx-bouncer
-RUN git-clone.sh https://github.com/crowdsecurity/cs-nginx-bouncer.git --ref v1.2.1
+RUN git-clone.sh https://github.com/crowdsecurity/cs-nginx-bouncer.git --ref v1.2.2
 
 # final assembly
 
