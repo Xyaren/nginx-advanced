@@ -99,7 +99,7 @@ RUN git-clone.sh https://github.com/openresty/lua-resty-string.git --ref v0.19
 RUN make install LUA_LIB_DIR=/usr/src/lua/share/lua/5.1
 
 WORKDIR /usr/src/lua-cs-bouncer
-RUN git-clone.sh https://github.com/crowdsecurity/lua-cs-bouncer.git --ref v1.0.18
+RUN git-clone.sh https://github.com/crowdsecurity/lua-cs-bouncer.git --ref v1.0.19
 RUN cp -r lib/* /usr/src/lua/share/lua/5.1/
 
 WORKDIR /usr/src
@@ -108,7 +108,7 @@ RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/sr
 RUN luarocks --lua-version=5.1 --lua-dir=/usr/src/luajit2/_output --tree=/usr/src/lua install lua-resty-openssl 1.8.0
 
 WORKDIR /usr/src/cs-nginx-bouncer
-RUN git-clone.sh https://github.com/crowdsecurity/cs-nginx-bouncer.git --ref v1.2.2
+RUN git-clone.sh https://github.com/crowdsecurity/cs-nginx-bouncer.git --ref v1.2.3
 
 # final assembly
 
