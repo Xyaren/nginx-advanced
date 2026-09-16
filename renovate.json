@@ -1,6 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "matchDepNames": ["crowdsecurity/cs-nginx-bouncer", "crowdsecurity/lua-cs-bouncer"],
+      "groupName": "crowdsec"
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
