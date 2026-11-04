@@ -63,7 +63,7 @@ ENV LUAJIT_INC=/usr/src/luajit2/_output/include/luajit-2.1
 
 #for lua
 WORKDIR /usr/src/ngx_devel_kit
-RUN git-clone.sh https://github.com/openresty/ngx_devel_kit.git --ref v0.3.5
+RUN git-clone.sh https://github.com/openresty/ngx_devel_kit.git --ref v0.3.6
 
 #for lua
 WORKDIR /usr/src/lua-nginx-module
