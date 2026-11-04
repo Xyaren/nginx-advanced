@@ -44,7 +44,7 @@ WORKDIR /usr/src/nginx-module-vts
 RUN git-clone.sh https://github.com/vozlt/nginx-module-vts.git --ref v0.2.7
 
 WORKDIR /usr/src/nginx-module-headers-more
-RUN git-clone.sh https://github.com/openresty/headers-more-nginx-module.git --ref v0.40
+RUN git-clone.sh https://github.com/openresty/headers-more-nginx-module.git --ref v0.41
 
 #TODO: deprecated
 WORKDIR /usr/src/ngx_brotli
