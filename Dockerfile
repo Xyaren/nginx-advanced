@@ -1,5 +1,5 @@
 ## syntax=docker/dockerfile:1
-ARG NGINX_VERSION=1.31.8
+ARG NGINX_VERSION=1.31.9
 FROM nginx:${NGINX_VERSION} AS build
 #FROM ghcr.io/nginx/nginx-unprivileged:${NGINX_VERSION} as build
 
