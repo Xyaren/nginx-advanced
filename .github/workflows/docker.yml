@@ -11,7 +11,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  HURL_VERSION: "6.1.0"
 
 jobs:
   test:
@@ -36,10 +35,8 @@ jobs:
       - name: Install Hurl
         run: |
           sudo apt update
-          sudo apt install -y libxml2
-          curl -LO https://github.com/Orange-OpenSource/hurl/releases/download/${HURL_VERSION}/hurl_${HURL_VERSION}_amd64.deb
-          sudo dpkg -i hurl_${HURL_VERSION}_amd64.deb
-
+          sudo add-apt-repository -y ppa:lepapareil/hurl
+          sudo apt install -y hurl
       - name: Test
         run: bash test/run-tests.sh --no-build
 
